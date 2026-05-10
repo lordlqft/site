@@ -19,17 +19,15 @@ const About = () => {
   const themeColors = useThemeColors();
 
   const roles = [
-    'Software Engineer',
-    'Full-Stack Developer',
-    'Systems Engineer',
-    'Frontend Developer',
+    'Desenvolvedor de Sistemas',
+    'Programador'
   ];
 
   const profileImages = [
-    { src: profile1, caption: "photo 1" },
-    { src: profile2, caption: "photo 2" },
-    { src: profile3, caption: "photo 3" }
-  ];
+  { src: profile1, caption: "me" },
+  { src: profile2, caption: "myself" },
+  { src: profile3, caption: "I" }
+];
 
   const fullAsciiArt = `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⢠⡾⠲⠶⣤⣀⣠⣤⣤⣤⡿⠛⠿⡴⠾⠛⢻⡆⠀⠀⠀
@@ -42,10 +40,9 @@ const About = () => {
 ⠀⠀⠴⠛⠙⣳⠋⠉⠉⠙⣆⠀⠀⢰⡟⠉⠈⠙⢷⠟⠈⠙⠂⠀
 ⠀⠀⠀⠀⠀⢻⣄⣠⣤⣴⠟⠛⠛⠛⢧⣤⣤⣀⡾⠀⠀⠀⠀⠀`;
 
-  // Typewriter effect for ASCII art
   useEffect(() => {
     let currentIndex = 0;
-    const typingSpeed = 3; // Speed in milliseconds
+    const typingSpeed = 3;
 
     const typeWriter = () => {
       if (currentIndex < fullAsciiArt.length) {
@@ -55,14 +52,12 @@ const About = () => {
       }
     };
 
-    // Start typing after a small delay
     const startDelay = setTimeout(() => {
       typeWriter();
     }, 500);
 
     return () => clearTimeout(startDelay);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run once on mount
+  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -79,7 +74,6 @@ const About = () => {
           const sectionHeight = rect.height;
           const windowHeight = window.innerHeight;
 
-          // Calculate how much of the section is in view
           const visibleTop = Math.max(0, -rect.top);
           const visibleBottom = Math.min(sectionHeight, windowHeight - rect.top);
           const visibleHeight = Math.max(0, visibleBottom - visibleTop);
@@ -93,15 +87,13 @@ const About = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
+    handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Focus management for modal
   useEffect(() => {
     if (showProfileModal) {
-      // Focus the modal when it opens
       const timer = setTimeout(() => {
         const modal = document.querySelector('[role="region"][aria-label="Profile photo carousel"]') as HTMLElement;
         if (modal) {
@@ -112,7 +104,6 @@ const About = () => {
     }
   }, [showProfileModal]);
 
-  // Carousel navigation functions
   const goToPrevious = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === 0 ? profileImages.length - 1 : prevIndex - 1
@@ -129,7 +120,6 @@ const About = () => {
     setCurrentImageIndex(index);
   };
 
-  // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
       goToPrevious();
@@ -164,17 +154,15 @@ const About = () => {
   ];
 
   const getStickerStyle = (sticker: typeof stickers[0]) => {
-    const progress = scrollProgress; // Direct progress for spreading effect when closer
+    const progress = scrollProgress;
     const isMobile = window.innerWidth < 768;
-    const isVerySmall = window.innerWidth < 375; // iPhone SE and similar
+    const isVerySmall = window.innerWidth < 375;
 
-    // Use mobile positioning on smaller screens
     const initialX = isMobile ? sticker.mobileInitialX : sticker.initialX;
     const initialY = isMobile ? sticker.mobileInitialY : sticker.initialY;
     const finalX = isMobile ? sticker.mobileFinalX : sticker.finalX;
     const finalY = isMobile ? sticker.mobileFinalY : sticker.finalY;
 
-    // Further constrain for very small screens to prevent ANY horizontal overflow
     const constrainedFinalX = isVerySmall
       ? Math.max(-100, Math.min(100, finalX * 0.3))
       : isMobile
@@ -186,7 +174,7 @@ const About = () => {
     const y = initialY + (constrainedFinalY - initialY) * progress;
     const scale = isVerySmall ? 0.4 + (0.15 * progress) : isMobile ? 0.6 + (0.2 * progress) : 0.8 + (0.4 * progress);
     const opacity = 0.9 + (0.1 * progress);
-    const rotation = progress * 20; // Add slight rotation
+    const rotation = progress * 20;
 
     return {
       transform: `translate(${x}px, ${y}px) scale(${scale}) rotate(${rotation}deg)`,

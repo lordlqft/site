@@ -14,15 +14,12 @@ const Projects = () => {
   const { isDarkMode } = useDarkMode();
   const themeColors = useThemeColors();
 
-  // track all the random background stars
   const [stars, setStars] = useState<Array<{ id: number; x: number; y: number; image: string; isDragging: boolean }>>([]);
   const [draggedStar, setDraggedStar] = useState<number | null>(null);
 
-  // the special "drag me" star
   const [specialStar, setSpecialStar] = useState<{ x: number; y: number }>({ x: 85, y: 8 });
   const [isDraggingSpecial, setIsDraggingSpecial] = useState(false);
 
-  // carousel state
   const [currentPage, setCurrentPage] = useState(0);
   const [direction, setDirection] = useState<'left' | 'right'>('right');
   const projectsPerPage = 4;
@@ -31,28 +28,22 @@ const Projects = () => {
   const isDraggingRef = useRef(false);
 
   useEffect(() => {
-    // spawn stars when component mounts or dark mode changes
     const generatedStars = Array.from({ length: 30 }, (_, i) => {
       let x, y;
 
-      // Keep stars away from the title and cards area (roughly 20-80% horizontally, 15-85% vertically)
       const zone = i % 4;
       if (zone === 0) {
-        // top area - above the title
         x = Math.random() * 90 + 5;
-        y = Math.random() * 10; // Only in top 10%
+        y = Math.random() * 10;
       } else if (zone === 1) {
-        // bottom area - below the cards
         x = Math.random() * 90 + 5;
-        y = Math.random() * 10 + 90; // Only in bottom 10%
+        y = Math.random() * 10 + 90;
       } else if (zone === 2) {
-        // left side
-        x = Math.random() * 15; // Only in left 15%
-        y = Math.random() * 60 + 20; // Middle vertical area
+        x = Math.random() * 15;
+        y = Math.random() * 60 + 20;
       } else {
-        // right side
-        x = Math.random() * 15 + 85; // Only in right 15%
-        y = Math.random() * 60 + 20; // Middle vertical area
+        x = Math.random() * 15 + 85;
+        y = Math.random() * 60 + 20;
       }
 
       return {
@@ -86,7 +77,6 @@ const Projects = () => {
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-        // Keep within bounds
         const clampedX = Math.max(0, Math.min(95, x));
         const clampedY = Math.max(0, Math.min(95, y));
 
@@ -101,7 +91,6 @@ const Projects = () => {
         const x = ((touch.clientX - rect.left) / rect.width) * 100;
         const y = ((touch.clientY - rect.top) / rect.height) * 100;
 
-        // Keep within bounds
         const clampedX = Math.max(0, Math.min(95, x));
         const clampedY = Math.max(0, Math.min(95, y));
 
@@ -134,7 +123,6 @@ const Projects = () => {
     };
   }, [isDraggingSpecial]);
 
-  // Drag handlers for regular stars
   const handleStarMouseDown = (starId: number) => (e: React.MouseEvent) => {
     e.stopPropagation();
     setDraggedStar(starId);
@@ -160,7 +148,6 @@ const Projects = () => {
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-        // Keep within bounds
         const clampedX = Math.max(0, Math.min(95, x));
         const clampedY = Math.max(0, Math.min(95, y));
 
@@ -179,7 +166,6 @@ const Projects = () => {
         const x = ((touch.clientX - rect.left) / rect.width) * 100;
         const y = ((touch.clientY - rect.top) / rect.height) * 100;
 
-        // Keep within bounds
         const clampedX = Math.max(0, Math.min(95, x));
         const clampedY = Math.max(0, Math.min(95, y));
 
@@ -226,35 +212,34 @@ const Projects = () => {
     };
   }, [draggedStar]);
 
-  // project data - these are the main cards
   const projects = [
     {
-      title: "Project One",
-      description: "A brief description of your first project. Highlight the key features and what makes it unique.",
-      technologies: ["React", "TypeScript", "Node.js", "MongoDB"],
+      title: "D20",
+      description: "Sistema de batalha em C# com mecânicas de RPG usando D20, ataques, defesa, cura e inimigos.",
+      technologies: ["CS"],
       icon: comingSoon,
       detailsUrl: "/projects/project-one",
       githubUrl: socialLinks.repositories.projectOne
     },
     {
-      title: "Project Two",
-      description: "A brief description of your second project. Highlight the key features and what makes it unique.",
-      technologies: ["Python", "Flask", "PostgreSQL", "Docker"],
+      title: "Semaforo Inteligente",
+      description: "Documentação do projeto",
+      technologies: ["VSCode", "Word"],
       icon: comingSoon,
       detailsUrl: "/projects/project-two",
       githubUrl: socialLinks.repositories.projectTwo
     },
     {
-      title: "Project Three",
-      description: "A brief description of your third project. Highlight the key features and what makes it unique.",
-      technologies: ["JavaScript", "Express", "AWS", "Tailwind CSS"],
+      title: "SiteparaD",
+      description: "Site feito para minha namorada, com o intuito de mostrar os projetos que fiz para ela e também para praticar minhas habilidades de desenvolvimento web.",
+      technologies: ["CSS", "HTML", "JS"],
       icon: comingSoon,
       detailsUrl: "/projects/project-three",
       githubUrl: socialLinks.repositories.projectThree
     },
     {
-      title: "Project Four",
-      description: "A brief description of your fourth project. Highlight the key features and what makes it unique.",
+      title: "Extra",
+      description: "Sistema de login e cadastro",
       technologies: ["C++", "CMake", "OpenGL"],
       icon: comingSoon,
       detailsUrl: "/projects/project-four",
@@ -262,13 +247,11 @@ const Projects = () => {
     }
   ];
 
-  // Calculate carousel pagination
   const totalPages = Math.ceil(projects.length / projectsPerPage);
   const startIndex = currentPage * projectsPerPage;
   const endIndex = startIndex + projectsPerPage;
   const currentProjects = projects.slice(startIndex, endIndex);
 
-  // Create placeholder cards for "Coming Soon" projects
   const placeholderCount = projectsPerPage - currentProjects.length;
   const placeholders = Array.from({ length: placeholderCount }, (_, i) => ({
     id: `placeholder-${i}`,

@@ -114,8 +114,8 @@ const Navigation = () => {
             WebkitTextFillColor: themeColors.colors.pink[500]
           }}
           onClick={() => window.location.href = '/'}
-          aria-label="Your Name - Go to homepage">
-          Your Name
+          aria-label="Folote - Go to homepage">
+          Folote
         </button>
         
         {/* Desktop Navigation */}
